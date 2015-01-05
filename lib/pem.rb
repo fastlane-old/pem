@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift File.expand_path('..', __FILE__) # traveling-ruby
+
 require 'json'
 require 'pem/version'
 require 'pem/helper'
