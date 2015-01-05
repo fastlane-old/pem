@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'pem/version'
+require 'pem/version' unless ENV["PEM_VERSION"]
 
 Gem::Specification.new do |spec|
   spec.name          = "pem"
-  spec.version       = PEM::VERSION
+  spec.version       = ENV["PEM_VERSION"] || PEM::VERSION
   spec.authors       = ["Felix Krause"]
   spec.email         = ["pem@krausefx.com"]
   spec.summary       = %q{Tired of creating and maintaining your push certification profiles? PEM does all that for you.}

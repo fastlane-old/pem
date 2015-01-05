@@ -39,3 +39,8 @@ build/
 .idea
 spec/fixtures/*.itmsp/*.png
 /integration
+
+# Traveling Ruby
+/packaging/traveling-ruby*
+/packaging/vendor/*
+/*-osx.tar.gz
