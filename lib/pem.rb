@@ -6,6 +6,7 @@ require 'pem/developer_center'
 require 'pem/update_checker'
 require 'pem/cert_manager'
 require 'pem/signing_request'
+require 'tempfile'
 
 # Third Party code
 require 'colored'
