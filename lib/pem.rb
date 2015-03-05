@@ -3,6 +3,7 @@ require 'pem/dependency_checker'
 require 'pem/developer_center'
 require 'pem/cert_manager'
 require 'pem/signing_request'
+require 'tempfile'
 
 require 'fastlane_core'
 

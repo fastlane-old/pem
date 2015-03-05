@@ -12,10 +12,11 @@ module PEM
       cert_file = dev.fetch_cer_file(app_identifier, production)
       rsa_file = File.join(TMP_FOLDER, 'private_key.key')
 
-      pem_temp = File.join(TMP_FOLDER, 'pem_temp.pem')
+      tempFileName = Dir::Tmpname.make_tmpname(["#{app_identifier}_pem_temp", '.pem'], nil)
+
+      pem_temp = File.join(TMP_FOLDER, tempFileName)
 
       certificate_type = (production ? 'production' : 'development')
-
 
       pem_file = File.join(TMP_FOLDER, "#{certificate_type}_#{app_identifier}.pem")
       command("openssl x509 -inform der -in '#{cert_file}' -out #{pem_temp}")
