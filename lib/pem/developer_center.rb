@@ -24,6 +24,10 @@ module FastlaneCore
           sleep 3 # this takes some time
           create_apple_pay_for_app(app_identifier)
           open_app_page(app_identifier)
+          sleep 2
+          click_on "Edit"
+          sleep 2
+          wait_for_elements(".item-details") # just to finish loading
         end
 
         push_value = first(:css, '#pushEnabled').value
