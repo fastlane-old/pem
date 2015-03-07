@@ -4,7 +4,7 @@ module FastlaneCore
   class DeveloperCenter
     APP_IDS_URL = "https://developer.apple.com/account/ios/identifiers/bundle/bundleList.action"
 
-    
+
     # This method will enable push for the given app
     # and download the cer file in any case, no matter if it existed before or not
     # @return the path to the push file
@@ -14,6 +14,17 @@ module FastlaneCore
 
         click_on "Edit"
         wait_for_elements(".item-details") # just to finish loading
+
+        apple_pay_value = first(:css, '#omcEnabled').value
+        if apple_pay_value == "on"
+          Helper.log.info "Apple Pay for app '#{app_identifier}' is enabled"
+        else
+          Helper.log.warn "Apple Pay '#{app_identifier}' is disabled. This has to change."
+          first(:css, '#omcEnabled').click
+          sleep 3 # this takes some time
+          create_apple_pay_for_app(app_identifier)
+          open_app_page(app_identifier)
+        end
 
         push_value = first(:css, '#pushEnabled').value
         if push_value == "on"
@@ -97,26 +108,48 @@ module FastlaneCore
         url = download_button['href']
         url = [host, url].join('')
         Helper.log.info "Downloading URL: '#{url}'"
-        
+
         cookieString = ""
-        
+
         page.driver.cookies.each do |key, cookie|
           cookieString << "#{cookie.name}=#{cookie.value};" # append all known cookies
-        end  
-        
+        end
+
         data = open(url, {'Cookie' => cookieString}).read
 
         raise "Something went wrong when downloading the certificate" unless data
 
         path = "#{TMP_FOLDER}aps_#{certificate_type}_#{app_identifier}.cer"
         dataWritten = File.write(path, data)
-        
+
         if dataWritten == 0
           raise "Can't write to #{TMP_FOLDER}"
         end
-        
+
         Helper.log.info "Successfully downloaded latest .cer file to '#{path}'".green
         return path
+      end
+
+      def create_apple_pay_for_app(app_identifier)
+
+        begin
+          Helper.log.debug "Enabling Apple Pay Support"
+          wait_for_elements('.button.small.green.ok.click').first.click
+          sleep 2
+          wait_for_elements('.button.small.navLink.enabled').first.click
+          sleep 2
+          wait_for_elements('.selectAll.column').first.click
+          wait_for_elements('.button.small.blue.right.submit').first.click
+          sleep 2
+          wait_for_elements('.button.small.blue.right.submit').first.click
+          sleep 2
+          wait_for_elements('.button.small.center.cancel').first.click
+          sleep 2
+          Helper.log.debug "Apple Pay Support Successfully Enabled"
+        rescue
+          raise "Could not enable Apple Pay for app '#{app_identifier}'. \n\n#{current_url}".red
+        end
+
       end
 
       def click_next

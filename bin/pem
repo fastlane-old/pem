@@ -26,6 +26,8 @@ class PemApplication
     global_option '-u', '--username STRING', 'Your Apple ID username'
     global_option '-a', '--identifier STRING', String, 'The bundle identifier of your app'
 
+    global_option '-pay', 'Add Apple Pay support to the App ID'
+
     command :renew do |c|
       c.syntax = 'pem renew'
       c.description = 'Renews the certificate (in case it expired) and shows the path to the generated pem file'
@@ -54,7 +56,7 @@ class PemApplication
     user = options.username
     user ||= ENV["PEM_USERNAME"]
     user ||= CredentialsManager::AppfileConfig.try_fetch_value(:apple_id)
-    
+
     CredentialsManager::PasswordManager.shared_manager(user) if user
   end
 
