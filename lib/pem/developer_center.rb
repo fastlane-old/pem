@@ -134,11 +134,13 @@ module FastlaneCore
 
         begin
           Helper.log.debug "Enabling Apple Pay Support"
-          wait_for_elements('.button.small.green.ok.click').first.click
+          wait_for_elements('.button.small.green.ok').first.click
           sleep 2
           wait_for_elements('.button.small.navLink.enabled').first.click
           sleep 2
-          wait_for_elements('.selectAll.column').first.click
+          wait_for_elements('#omcList-1')
+          first(:css, '#omcList-1').click
+          sleep 2
           wait_for_elements('.button.small.blue.right.submit').first.click
           sleep 2
           wait_for_elements('.button.small.blue.right.submit').first.click
