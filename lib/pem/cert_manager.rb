@@ -19,12 +19,18 @@ module PEM
         self.pem_file = File.join(TMP_FOLDER, "#{certificate_type}_#{PEM.config[:app_identifier]}.pem")
         self.passphrase = PEM.config[:p12_password] || ''
 
-        File.write(pem_file, pem_certificate)
+        File.open(pem_file, "wb") do |f|
+          f.write(pem_certificate)
+        end
 
         # Generate p12 file as well
         if PEM.config[:generate_p12]
           output = "#{certificate_type}_#{PEM.config[:app_identifier]}.p12"
-          File.write(output, p12_certificate.to_der)
+
+          File.open(output, "wb") do |f|
+            f.write(p12_certificate.to_der)
+          end
+
           puts output.green
         end
 
@@ -51,4 +57,3 @@ module PEM
     end
   end
 end
-
